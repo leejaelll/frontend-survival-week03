@@ -1,28 +1,43 @@
-import TextField from './TextField';
-import FilterCategory from './FilterCategory';
-
-import { RestaurantType } from '../types/RestaurantType';
+import React from 'react';
 
 type SearchBarProps = {
-  restaurants: RestaurantType[];
-  searchText: string;
-  setSearchText: (value: string) => void;
-  setSelectCategory: (value: string) => void;
+  categories: string[];
+  filterText: string;
+  setFilterText: (text: string) => void;
+  setFilterCategory: (text: string) => void;
 };
 
 export default function SearchBar({
-  restaurants,
-  searchText,
-  setSearchText,
-  setSelectCategory,
+  categories,
+  filterText,
+  setFilterText,
+  setFilterCategory,
 }: SearchBarProps) {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setFilterText(event.target.value);
+  };
+  const id = 'input-search';
   return (
-    <div>
-      <TextField searchText={searchText} setSearchText={setSearchText} />
-      <FilterCategory
-        restaurants={restaurants}
-        setSelectCategory={setSelectCategory}
+    <>
+      <label htmlFor={id}>검색</label>
+      <input
+        id={id}
+        placeholder="식당이름"
+        type="text"
+        value={filterText}
+        onChange={handleChange}
       />
-    </div>
+      <div>
+        <ul>
+          {['전체', ...categories].map((category: string) => (
+            <li key={category}>
+              <button type="button" onClick={() => setFilterCategory(category)}>
+                {category}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </>
   );
 }
